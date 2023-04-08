@@ -32,7 +32,7 @@ export function handleApplicationErrors(
     });
   }
 
-  if (err.name === 'InvalidCepFormat') {
+  if (err.name === 'InvalidCepFormat' || err.name === 'NotFoundCepError') {
     return res.status(httpStatus.NO_CONTENT).send({ message: err.message });
   }
 
