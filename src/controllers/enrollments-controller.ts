@@ -2,6 +2,7 @@ import { Response, NextFunction } from 'express';
 import httpStatus from 'http-status';
 import { AuthenticatedRequest } from '@/middlewares';
 import enrollmentsService from '@/services/enrollments-service';
+import { invalidCepFormat, invalidDataError } from '@/errors';
 
 export async function getEnrollmentByUser(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
@@ -33,6 +34,9 @@ export async function getAddressFromCEP(req: AuthenticatedRequest, res: Response
 
   try {
     const address = await enrollmentsService.getAddressFromCEP(cepNumber);
+    if (address.hasOwnProperty('statusError')) {
+      throw invalidCepFormat();
+    }
     res.status(httpStatus.OK).send(address);
   } catch (error) {
     next(error);

@@ -8,7 +8,7 @@ export function handleApplicationErrors(
   res: Response,
   next: NextFunction,
 ) {
-  if (err.name === 'CannotEnrollBeforeStartDateError') {
+  if (err.name === 'CannotEnrollBeforeStartDateError' || err.name === 'InvalidDataError') {
     return res.status(httpStatus.BAD_REQUEST).send({
       message: err.message,
     });
@@ -33,9 +33,7 @@ export function handleApplicationErrors(
   }
 
   if (err.name === 'InvalidCepFormat') {
-    return res.status(httpStatus.NO_CONTENT).send({
-      message: err.message,
-    });
+    return res.status(httpStatus.NO_CONTENT).send({ message: err.message });
   }
 
   /* eslint-disable-next-line no-console */
