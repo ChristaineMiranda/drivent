@@ -2,7 +2,6 @@ import { Response, NextFunction } from 'express';
 import httpStatus from 'http-status';
 import { AuthenticatedRequest } from '@/middlewares';
 import enrollmentsService from '@/services/enrollments-service';
-import { invalidCepFormat, invalidDataError } from '@/errors';
 
 export async function getEnrollmentByUser(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
