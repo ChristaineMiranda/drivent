@@ -30,13 +30,10 @@ export async function postCreateOrUpdateEnrollment(req: AuthenticatedRequest, re
 }
 
 export async function getAddressFromCEP(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  const cepNumber = req.query.cep as string;
+  const { cep } = req.query as Record<string, string>;
 
   try {
-    const address = await enrollmentsService.getAddressFromCEP(cepNumber);
-    if (address.hasOwnProperty('statusError')) {
-      throw invalidCepFormat();
-    }
+    const address = await enrollmentsService.getAddressFromCEP(cep);
     res.status(httpStatus.OK).send(address);
   } catch (error) {
     next(error);
