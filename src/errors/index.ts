@@ -6,3 +6,4 @@ export * from './not-found-error';
 export * from './unauthorized-error';
 export * from './request-error';
 export * from './invalid-cep-format-error';
+export * from './invalid-or-not-sent-id-error';
