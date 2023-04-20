@@ -1,8 +1,7 @@
-import httpStatus = require('http-status');
 import { notFoundError, paymentRequired } from '@/errors';
 import hotelRepository from '@/repositories/hotel-repository';
 
-async function getAllHotels(userId: number) {
+async function checkDataForUser(userId: number) {
   const enrollmentExists = await hotelRepository.findEnrollmentAndTicket(userId);
 
   if (!enrollmentExists || !enrollmentExists.Ticket) throw notFoundError();
@@ -15,13 +14,23 @@ async function getAllHotels(userId: number) {
     enrollmentExists.Ticket[0].status !== 'PAID'
   )
     throw paymentRequired();
+}
+async function getAllHotels(userId: number) {
+  checkDataForUser(userId);
+  const hotelsList = await hotelRepository.findHotels();
+  return hotelsList;
+}
 
-  // const hotelsList = await hotelRepository.findHotels();
-  // return hotelsList;
+async function getRooms(userId: number, hotelId: number) {
+  checkDataForUser(userId);
+  const hotel = hotelRepository.findHotelById(hotelId);
+  if (!hotel) throw notFoundError();
+  return hotel;
 }
 
 const hotelService = {
   getAllHotels,
+  getRooms,
 };
 
 export { hotelService };

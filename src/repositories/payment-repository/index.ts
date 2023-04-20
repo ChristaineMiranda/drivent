@@ -1,4 +1,4 @@
-import { Payment } from '@prisma/client';
+import { newPayment } from '@/protocols';
 import { prisma } from '@/config';
 
 async function getTicketById(ticketId: number) {
@@ -17,7 +17,6 @@ async function getPayment(ticketId: number) {
   });
 }
 
-type newPayment = Omit<Payment, 'id' | 'createdAt' | 'updatedAt'>;
 async function payTicket(data: newPayment) {
   return prisma.payment.create({
     data: data,

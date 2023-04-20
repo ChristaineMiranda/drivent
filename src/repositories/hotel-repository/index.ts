@@ -14,13 +14,21 @@ async function includesHotel(enrollmentId: number) {
   });
 }
 
-// async function findHotels() {
+async function findHotels() {
+  return await prisma.hotel.findMany();
+}
 
-// }
+async function findHotelById(id: number) {
+  return await prisma.hotel.findFirst({
+    where: { id },
+    include: { Rooms: true },
+  });
+}
 
 const hotelRepository = {
   findEnrollmentAndTicket,
   includesHotel,
-  // findHotels
+  findHotels,
+  findHotelById,
 };
 export default hotelRepository;
