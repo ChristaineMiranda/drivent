@@ -42,6 +42,10 @@ export function handleApplicationErrors(
     return res.status(httpStatus.NO_CONTENT).send({ message: err.message });
   }
 
+  if (err.name === 'PaymentRequiredError') {
+    return res.status(httpStatus.PAYMENT_REQUIRED).send(err.message);
+  }
+
   /* eslint-disable-next-line no-console */
   console.error(err.name);
   res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
