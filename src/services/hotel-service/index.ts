@@ -1,10 +1,10 @@
 import { notFoundError, paymentRequired } from '@/errors';
 import hotelRepository from '@/repositories/hotel-repository';
 
-async function checkDataForUser(userId: number) {
+async function checkDataForUser(userId: number): Promise<string> {
   const enrollmentExists = await hotelRepository.findEnrollmentAndTicket(userId);
 
-  if (!enrollmentExists || !enrollmentExists.Ticket) throw notFoundError();
+  if (!enrollmentExists || !enrollmentExists.Ticket) return 'notFoundError';
 
   const includesHotel = await hotelRepository.includesHotel(enrollmentExists.id);
 
@@ -13,16 +13,21 @@ async function checkDataForUser(userId: number) {
     includesHotel.TicketType.isRemote ||
     enrollmentExists.Ticket[0].status !== 'PAID'
   )
-    throw paymentRequired();
+    return 'paymentRequired';
 }
 async function getAllHotels(userId: number) {
-  checkDataForUser(userId);
+  const check = await checkDataForUser(userId);
+  if (check === 'paymentRequired') throw paymentRequired();
+  if (check === 'notFoundError') throw notFoundError();
+
   const hotelsList = await hotelRepository.findHotels();
   return hotelsList;
 }
 
 async function getRooms(userId: number, hotelId: number) {
-  checkDataForUser(userId);
+  const check = await checkDataForUser(userId);
+  if (check === 'paymentRequired') throw paymentRequired();
+  if (check === 'notFoundError') throw notFoundError();
   const hotel = hotelRepository.findHotelById(hotelId);
   if (!hotel) throw notFoundError();
   return hotel;
