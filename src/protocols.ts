@@ -46,3 +46,7 @@ export type InputTicketBody = {
 export type InputHotelId = {
   hotelId: number;
 };
+
+export type InputRoomId = {
+  roomId: number;
+};

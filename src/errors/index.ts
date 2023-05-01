@@ -9,3 +9,4 @@ export * from './invalid-cep-format-error';
 export * from './not-found-cep-error';
 export * from './invalid-or-not-sent-id-error';
 export * from './payment-required-error';
+export * from './forbidden-error';
