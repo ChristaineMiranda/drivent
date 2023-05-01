@@ -150,7 +150,7 @@ describe('GET /booking', () => {
 });
 
 describe('PUT /booking/:bookingId', () => {
-  it('should respond with status 403 if identifier does not exist', async () => {
+  it('should respond with status 404 if booking id does not exist', async () => {
     const user = await createUser();
     const token = await generateValidToken(user);
     const enrollment = await createEnrollmentWithAddress(user);
@@ -161,7 +161,7 @@ describe('PUT /booking/:bookingId', () => {
     const room = await createRoom(hotel.id);
 
     const response = await server.put(`/booking/0`).set('Authorization', `Bearer ${token}`).send({ roomId: room.id });
-    expect(response.status).toEqual(httpStatus.FORBIDDEN);
+    expect(response.status).toEqual(httpStatus.NOT_FOUND);
   });
 
   it('should respond with status 404 if booking id not sent', async () => {
@@ -194,7 +194,7 @@ describe('PUT /booking/:bookingId', () => {
     expect(response.status).toEqual(httpStatus.NOT_FOUND);
   });
 
-  it('should respond with status 404 if room is crowded', async () => {
+  it('should respond with status 403 if room is crowded', async () => {
     const user = await createUser();
     const token = await generateValidToken(user);
     const enrollment = await createEnrollmentWithAddress(user);

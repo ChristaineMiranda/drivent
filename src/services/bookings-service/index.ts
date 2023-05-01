@@ -1,5 +1,5 @@
 import hotelRepository from '@/repositories/hotel-repository';
-import { notFoundError, forbidden, unauthorizedError } from '@/errors';
+import { notFoundError, forbidden } from '@/errors';
 import bookingRepository from '@/repositories/booking-repository';
 
 async function checkDataForUser(userId: number): Promise<string> {
@@ -40,6 +40,7 @@ async function getBooking(userId: number) {
 }
 
 async function updateBooking(roomId: number, bookingId: number) {
+  if (!bookingId) throw notFoundError();
   const bookingExists = await bookingRepository.findBookingForId(bookingId);
   if (!bookingExists) throw forbidden();
 
